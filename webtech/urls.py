@@ -20,11 +20,23 @@ Including another URLconf
 # urlpatterns = [
 #     path('admin/', admin.site.urls),
 # ]
+
+
+# from django.contrib import admin
+# from django.urls import path, include
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('', include('pages.urls')),  # корневой маршрут
+# ]
+
+
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('pages.urls')),  # корневой маршрут
+    path('guestbook/', include('guestbook.urls')),
+    path('', include('guestbook.urls')),  # сделать гостевую главной (опционально)
 ]
 
