@@ -1,0 +1,8 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, Arial, sans-serif; }
+.container { max-width: 960px; margin: 0 auto; padding: 16px; }
+h1, h2 { margin: 12px 0; }
+form { display: grid; gap: 8px; max-width: 360px; }
+input, button { padding: 8px 12px; font-size: 16px; }
+button { cursor: pointer; }
+.alert { background: #e6ffed; border: 1px solid #b7eb8f; padding: 8px 12px; border-radius: 8px; }
