@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Изменить запись</h1>
+  <form method="post" class="card">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="grid">
+      <label>Имя</label>{{ form.name }}{{ form.name.errors }}
+      <label>Сообщение</label>{{ form.message }}{{ form.message.errors }}
+    </div>
+    <button type="submit">Сохранить</button>
+    <a href="{% url 'guestbook-detail' entry.id %}">Отмена</a>
+  </form>
+{% endblock %}

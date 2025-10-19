@@ -13,3 +13,4 @@ form.card{display:grid;gap:8px;max-width:520px;background:#f5f5f5;padding:12px;b
 input,textarea,button{padding:8px 12px;font-size:16px}
 ul.items{list-style:none;padding:0}
 ul.items li{padding:8px 0;border-bottom:1px solid #eee}
+.messages{list-style:none;padding:0;margin:8px 0} .msg{padding:8px 12px;border-radius:8px;margin:4px 0;background:#eef} .msg.success{background:#e6ffed} .msg.error{background:#ffecec}
