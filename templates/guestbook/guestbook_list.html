@@ -22,7 +22,10 @@
     {% for e in page_obj %}
       <li>
         <b><a href="{% url 'guestbook-detail' e.id %}">{{ e.name }}</a></b>
-        · <small>{{ e.created_at|date:'d.m.Y H:i' }}</small><br>
+        · <small>
+    {{ e.created_at|date:'d.m.Y H:i' }}
+    {% if e.user %} · автор: {{ e.user.username }}{% endif %}
+  </small> <br>
         {{ e.message }}
         <div class="actions">
           <a href="{% url 'guestbook-edit' e.id %}">Изменить</a> ·
@@ -43,10 +46,4 @@
       {% endif %}
     </nav>
   {% endif %}
-
-  <small>
-    {{ e.created_at|date:'d.m.Y H:i' }}
-    {% if e.user %} · автор: {{ e.user.username }}{% endif %}
-  </small>
-
 {% endblock %}
