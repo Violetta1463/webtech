@@ -14,29 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# from django.contrib import admin
-# from django.urls import path
-
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-# ]
-
-
-# from django.contrib import admin
-# from django.urls import path, include
-
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('', include('pages.urls')),  # корневой маршрут
-# ]
-
 
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('guestbook/', include('guestbook.urls')),
+    path('guestbook/', include('guestbook.urls')),
     path('accounts/', include('django.contrib.auth.urls')),  # login, logout, password_change, etc.
     path('', include('guestbook.urls')),  # сделать гостевую главной (опционально)
 ]
