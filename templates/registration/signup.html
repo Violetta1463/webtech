@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Регистрация</h1>
+  <form method="post" class="card">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <label>Логин</label>{{ form.username }}{{ form.username.errors }}
+    <label>Пароль</label>{{ form.password1 }}{{ form.password1.errors }}
+    <label>Пароль (повтор)</label>{{ form.password2 }}{{ form.password2.errors }}
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+  <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
+{% endblock %}

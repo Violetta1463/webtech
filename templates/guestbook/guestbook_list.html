@@ -43,4 +43,10 @@
       {% endif %}
     </nav>
   {% endif %}
+
+  <small>
+    {{ e.created_at|date:'d.m.Y H:i' }}
+    {% if e.user %} · автор: {{ e.user.username }}{% endif %}
+  </small>
+
 {% endblock %}
