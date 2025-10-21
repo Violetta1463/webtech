@@ -10,6 +10,75 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy, reverse
+from django.db.models import Q
+from .models import Entry
+from .forms import EntryForm
+
+class SearchMixin:
+    def get_queryset(self):
+        qs = super().get_queryset()
+        q = self.request.GET.get('q', '').strip()
+        if q:
+            qs = qs.filter(Q(name__icontains=q) | Q(message__icontains=q))
+        return qs
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['q'] = self.request.GET.get('q', '').strip()
+        return ctx
+
+class EntryListView(SearchMixin, ListView):
+    model = Entry
+    template_name = 'guestbook/entry_list.html'
+    paginate_by = 5
+
+class EntryDetailView(DetailView):
+    model = Entry
+    template_name = 'guestbook/entry_detail.html'
+    context_object_name = 'entry'
+
+class EntryCreateView(LoginRequiredMixin, CreateView):
+    model = Entry
+    form_class = EntryForm
+    template_name = 'guestbook/entry_form.html'
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.user = self.request.user
+        return super().form_valid(form)
+    def get_success_url(self):
+        from django.contrib import messages
+        messages.success(self.request, 'Запись добавлена')
+        return reverse('guestbook-detail', args=[self.object.pk])
+
+class OwnerOrStaffRequired(UserPassesTestMixin):
+    def test_func(self):
+        obj = self.get_object()
+        return (obj.user == self.request.user) or self.request.user.is_staff
+    def handle_no_permission(self):
+        from django.contrib import messages
+        messages.error(self.request, 'Недостаточно прав')
+        return super().handle_no_permission()
+
+class EntryUpdateView(LoginRequiredMixin, OwnerOrStaffRequired, UpdateView):
+    model = Entry
+    form_class = EntryForm
+    template_name = 'guestbook/entry_form.html'
+    def get_success_url(self):
+        from django.contrib import messages
+        messages.success(self.request, 'Запись обновлена')
+        return reverse('guestbook-detail', args=[self.object.pk])
+
+class EntryDeleteView(LoginRequiredMixin, OwnerOrStaffRequired, DeleteView):
+    model = Entry
+    template_name = 'guestbook/entry_confirm_delete.html'
+    success_url = reverse_lazy('guestbook')
+    def delete(self, request, *args, **kwargs):
+        from django.contrib import messages
+        messages.success(self.request, 'Запись удалена')
+        return super().delete(request, *args, **kwargs)
+
 
 def signup(request):
    if request.method == 'POST':

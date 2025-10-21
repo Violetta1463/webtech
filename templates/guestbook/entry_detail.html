@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{{ entry.name }}</h1>
+  <p><small>{{ entry.created_at|date:'d.m.Y H:i' }}{% if entry.user %} · автор: {{ entry.user.username }}{% endif %}</small></p>
+  {% if entry.image %}<img src="{{ entry.image.url }}" style="max-width:320px;height:auto"><br>{% endif %}
+  <p>{{ entry.message }}</p>
+    {% if user.is_authenticate %}
+    {% if entry.user == user or user.is_staff %}
+    <p class="actions"><a href="{% url 'guestbook-edit' entry.id %}">Изменить</a> · <a href="{% url 'guestbook-delete' entry.id %}">Удалить</a></p>
+  {% endif %}
+  {% endif %}
+
+  <p><a href="{% url 'guestbook' %}">← Назад к списку</a></p>
+{% endblock %}

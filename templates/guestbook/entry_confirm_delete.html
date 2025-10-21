@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Удалить запись?</h1>
+  <p><b>{{ object.name }}</b><br>{{ object.message }}</p>
+  <form method="post" class="card" style="max-width:420px">
+    {% csrf_token %}
+    <button type="submit">Удалить</button>
+    <a href="{% url 'guestbook-detail' object.id %}">Отмена</a>
+  </form>
+{% endblock %}

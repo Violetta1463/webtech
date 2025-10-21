@@ -4,11 +4,12 @@ from .models import Entry
 class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
-        fields = ['name', 'message']
+        fields = ['name', 'message', 'image']
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Ваше имя'}),
             'message': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Сообщение (до 500 символов)'}),
         }
+
 
     def clean_name(self):
         name = self.cleaned_data['name'].strip()
