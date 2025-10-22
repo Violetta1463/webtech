@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Гостевая книга</h1>
+  <form method="get" class="card" style="margin-bottom:12px">
+    <input type="text" name="q" value="{{ q }}" placeholder="Поиск по имени/сообщению">
+    <button type="submit">Искать</button>
+  </form>
+  {% if user.is_authenticated %}<p><a href="{% url 'guestbook-create' %}">Добавить запись</a></p>{% endif %}
+  <ul class="items">
+    {% for e in page_obj %}
+      <li>
+        <b><a href="{% url 'guestbook-detail' e.id %}">{{ e.name }}</a></b>
+        · <small>{{ e.created_at|date:'d.m.Y H:i' }}</small>
+        {% if e.user %} · автор: {{ e.user.username }}{% endif %}<br>
+        {% if e.image %}<img src="{{ e.image.url }}" style="max-width:220px;height:auto"><br>{% endif %}
+        {{ e.message }}
+      </li>
+    {% empty %}<li>Пока нет записей</li>{% endfor %}
+  </ul>
+  {% if page_obj.paginator.num_pages > 1 %}
+    <nav class="pagination">
+      {% if page_obj.has_previous %}<a href="?q={{ q }}&page={{ page_obj.previous_page_number }}">« Назад</a>{% endif %}
+      <span>Стр. {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}<a href="?q={{ q }}&page={{ page_obj.next_page_number }}">Вперёд »</a>{% endif %}
+    </nav>
+  {% endif %}
+{% endblock %}

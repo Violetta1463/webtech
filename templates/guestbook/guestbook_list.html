@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Гостевая книга</h1>
+
+  <form method="get" class="card" style="margin-bottom:12px">
+    <input type="text" name="q" value="{{ q }}" placeholder="Поиск по имени/сообщению">
+    <button type="submit">Искать</button>
+  </form>
+
+  <form method="post" class="card">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="grid">
+      <label>Имя</label>{{ form.name }}{{ form.name.errors }}
+      <label>Сообщение</label>{{ form.message }}{{ form.message.errors }}
+    </div>
+    <button type="submit">Добавить</button>
+  </form>
+
+  <h2>Последние записи</h2>
+  <ul class="items">
+    {% for e in page_obj %}
+      <li>
+        <b><a href="{% url 'guestbook-detail' e.id %}">{{ e.name }}</a></b>
+        · <small>
+    {{ e.created_at|date:'d.m.Y H:i' }}
+    {% if e.user %} · автор: {{ e.user.username }}{% endif %}
+  </small> <br>
+        {{ e.message }}
+        <div class="actions">
+          <a href="{% url 'guestbook-edit' e.id %}">Изменить</a> ·
+          <a href="{% url 'guestbook-delete' e.id %}">Удалить</a>
+        </div>
+      </li>
+    {% empty %}<li>Пока нет записей</li>{% endfor %}
+  </ul>
+
+  {% if page_obj.paginator.num_pages > 1 %}
+    <nav class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?q={{ q }}&page={{ page_obj.previous_page_number }}">« Назад</a>
+      {% endif %}
+      <span>Стр. {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?q={{ q }}&page={{ page_obj.next_page_number }}">Вперёд »</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+{% endblock %}

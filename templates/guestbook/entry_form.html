@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{% if object %}Изменить{% else %}Создать{% endif %} запись</h1>
+  <form method="post" enctype="multipart/form-data" class="card">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <label>Имя</label>{{ form.name }}{{ form.name.errors }}
+    <label>Сообщение</label>{{ form.message }}{{ form.message.errors }}
+    <label>Изображение</label>{{ form.image }}{{ form.image.errors }}
+    <button type="submit">Сохранить</button>
+    <a href="{% if object %}{% url 'guestbook-detail' object.id %}{% else %}{% url 'guestbook' %}{% endif %}">Отмена</a>
+  </form>
+{% endblock %}
